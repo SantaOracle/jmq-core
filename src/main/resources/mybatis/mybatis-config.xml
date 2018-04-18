@@ -6,4 +6,8 @@
         <setting name="logImpl" value="LOG4J" />
         <setting name="cacheEnabled" value="true"/>
     </settings>
+
+    <mappers>
+        <mapper resource="mybatis/mapper/AdminMapper.xml" />
+    </mappers>
 </configuration>
