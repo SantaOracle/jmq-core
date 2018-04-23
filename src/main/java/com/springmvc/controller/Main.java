@@ -40,4 +40,5 @@ public class Main {
     public String testLink(){
         return "welcome my ssm!";
     }
+
 }
