@@ -1,4 +1,4 @@
-package com.springmvc.service;
+package com.springmvc.service.impl;
 
 import com.springmvc.dao.AdminMapper;
 import com.springmvc.pojo.Admin;
