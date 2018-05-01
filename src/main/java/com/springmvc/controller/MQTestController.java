@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 @Controller
@@ -18,9 +19,19 @@ public class MQTestController {
 
     @Resource
     private JmsTemplate jmsTemplate;
+    @Resource
+    private QueueProducer queueProducer;
+    @Resource
+    private QueueConsumer queueConsumer;
 
-    private IProducer producer = new QueueProducer();
-    private IConsumer consumer = new QueueConsumer();
+    private IProducer producer;
+    private IConsumer consumer;
+
+    @PostConstruct
+    public void init(){
+        producer = queueProducer;
+        consumer = queueConsumer;
+    }
 
     @RequestMapping("/sendText")
     @ResponseBody
