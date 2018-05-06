@@ -8,6 +8,7 @@
     </settings>
 
     <mappers>
-        <mapper resource="mybatis/mapper/AdminMapper.xml" />
+        <mapper resource="mybatis/mapper/FlightFareMapper.xml" />
+        <mapper resource="mybatis/mapper/FlightFareSourceMapper.xml" />
     </mappers>
 </configuration>

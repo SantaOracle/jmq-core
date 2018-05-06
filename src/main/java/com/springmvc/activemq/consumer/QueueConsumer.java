@@ -4,6 +4,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
+import sun.security.util.Cache;
 
 import javax.annotation.Resource;
 

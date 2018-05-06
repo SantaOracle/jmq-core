@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springmvc.dao.FlightFareSourceDaoDao" >
+
+    <resultMap id="BaseResultMap" type="com.springmvc.pojo.FlightFare" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="link_key" property="linkKey" jdbcType="VARCHAR" />
+        <result column="dep" property="dep" jdbcType="VARCHAR" />
+        <result column="arr" property="arr" jdbcType="VARCHAR" />
+        <result column="dep_time" property="depTime" jdbcType="VARCHAR" />
+        <result column="fare" property="fare" jdbcType="INTEGER" />
+        <result column="validate" property="validate" jdbcType="CHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, link_key, dep, arr, dep_time, fare, validate
+    </sql>
+
+    <select id="selectByLinkKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List" />
+        from flight_fare
+        where link_key = #{linkKey, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByCondition" resultMap="BaseResultMap" parameterType="com.springmvc.pojo.FlightFare">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM flight_fare
+        WHERE
+        1=1
+        <trim suffixOverrides=",">
+            <if test="dep != null">
+                AND dep = #{dep, jdbcType=VARCHAR},
+            </if>
+            <if test="dep != null">
+                AND arr = #{arr, jdbcType=VARCHAR},
+            </if>
+            <if test="depTime != null">
+                AND dep_time LIKE '#{depTime, jdbcType=VARCHAR}%',
+            </if>
+        </trim>
+    </select>
+
+    <insert id="insert" parameterType="com.springmvc.pojo.FlightFare">
+        insert into flight_fare
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="linkKey != null" >
+                link_key,
+            </if>
+            <if test="dep != null" >
+                dep,
+            </if>
+            <if test="arr != null" >
+                arr,
+            </if>
+            <if test="depTime != null" >
+                dep_time,
+            </if>
+            <if test="fare != null" >
+                fare,
+            </if>
+            <if test="validate != null" >
+                validate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="linkKey != null" >
+                #{linkKey,jdbcType=VARCHAR},
+            </if>
+            <if test="dep != null" >
+                #{dep,jdbcType=VARCHAR},
+            </if>
+            <if test="arr != null" >
+                #{arr,jdbcType=VARCHAR},
+            </if>
+            <if test="depTime != null" >
+                #{depTime,jdbcType=VARCHAR},
+            </if>
+            <if test="fare != null" >
+                #{fare,jdbcType=INTEGER},
+            </if>
+            <if test="validate != null" >
+                #{validate,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByLinkKey" parameterType="com.springmvc.pojo.FlightFare">
+        update flight_fare
+        <set >
+            <if test="linkKey != null" >
+                link_key = #{linkKey,jdbcType=VARCHAR},
+            </if>
+            <if test="dep != null" >
+                dep = #{dep,jdbcType=VARCHAR},
+            </if>
+            <if test="arr != null" >
+                arr = #{arr,jdbcType=VARCHAR},
+            </if>
+            <if test="depTime != null" >
+                dep_time = #{depTime,jdbcType=VARCHAR},
+            </if>
+            <if test="fare != null" >
+                fare = #{fare,jdbcType=INTEGER},
+            </if>
+            <if test="validate != null" >
+                validate = #{validate,jdbcType=CHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+</mapper>
