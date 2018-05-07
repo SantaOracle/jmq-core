@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.springmvc.dao.FlightFareSourceDaoDao" >
+<mapper namespace="com.springmvc.dao.FlightFareSourceDao" >
 
     <resultMap id="BaseResultMap" type="com.springmvc.pojo.FlightFare" >
         <id column="id" property="id" jdbcType="INTEGER" />
@@ -29,15 +29,15 @@
         FROM flight_fare
         WHERE
         1=1
-        <trim suffixOverrides=",">
+        <trim>
             <if test="dep != null">
-                AND dep = #{dep, jdbcType=VARCHAR},
+                AND dep = #{dep, jdbcType=VARCHAR}
             </if>
             <if test="dep != null">
-                AND arr = #{arr, jdbcType=VARCHAR},
+                AND arr = #{arr, jdbcType=VARCHAR}
             </if>
             <if test="depTime != null">
-                AND dep_time LIKE '#{depTime, jdbcType=VARCHAR}%',
+                AND dep_time LIKE concat(#{depTime, jdbcType=VARCHAR}, '%')
             </if>
         </trim>
     </select>
@@ -89,9 +89,6 @@
     <update id="updateByLinkKey" parameterType="com.springmvc.pojo.FlightFare">
         update flight_fare
         <set >
-            <if test="linkKey != null" >
-                link_key = #{linkKey,jdbcType=VARCHAR},
-            </if>
             <if test="dep != null" >
                 dep = #{dep,jdbcType=VARCHAR},
             </if>
@@ -108,7 +105,7 @@
                 validate = #{validate,jdbcType=CHAR},
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where link_key = #{linkKey,jdbcType=VARCHAR}
     </update>
 
 
