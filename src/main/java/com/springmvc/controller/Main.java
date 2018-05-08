@@ -18,16 +18,4 @@ public class Main {
         return "Hello world!";
     }
 
-//    @RequestMapping(value = "/admin",method = RequestMethod.POST)
-//    @ResponseBody
-//    public int insertUser(Admin admin){
-//        return adminService.insertAdmin(admin);
-//
-//    }
-//    @RequestMapping(value = "/admin/{id}",method = RequestMethod.GET)
-//    @ResponseBody
-//    public Admin getUser(@PathVariable Integer id){
-//        return adminService.getAdmin(id);
-//
-//    }
 }

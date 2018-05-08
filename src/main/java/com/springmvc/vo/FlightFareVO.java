@@ -2,6 +2,9 @@ package com.springmvc.vo;
 
 import com.springmvc.pojo.FlightFare;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FlightFareVO {
 
     private String dep;
@@ -19,6 +22,15 @@ public class FlightFareVO {
         this.arr = flightFare.getArr();
         this.depTime = flightFare.getDepTime();
         this.fare = flightFare.getFare();
+    }
+
+    public static List<FlightFareVO> generateVOList(List<FlightFare> flightFares){
+        List<FlightFareVO> voList = new ArrayList<FlightFareVO>();
+        for (FlightFare flightFare : flightFares){
+            FlightFareVO vo = new FlightFareVO(flightFare);
+            voList.add(vo);
+        }
+        return voList;
     }
 
     public String getDep() {

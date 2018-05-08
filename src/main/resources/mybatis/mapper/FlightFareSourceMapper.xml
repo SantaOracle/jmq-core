@@ -19,14 +19,14 @@
     <select id="selectByLinkKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List" />
-        from flight_fare
+        from flight_fare_source
         where link_key = #{linkKey, jdbcType=VARCHAR}
     </select>
 
     <select id="selectByCondition" resultMap="BaseResultMap" parameterType="com.springmvc.pojo.FlightFare">
         SELECT
         <include refid="Base_Column_List" />
-        FROM flight_fare
+        FROM flight_fare_source
         WHERE
         1=1
         <trim>
@@ -43,7 +43,7 @@
     </select>
 
     <insert id="insert" parameterType="com.springmvc.pojo.FlightFare">
-        insert into flight_fare
+        insert into flight_fare_source
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="linkKey != null" >
                 link_key,
@@ -87,7 +87,7 @@
     </insert>
 
     <update id="updateByLinkKey" parameterType="com.springmvc.pojo.FlightFare">
-        update flight_fare
+        update flight_fare_source
         <set >
             <if test="dep != null" >
                 dep = #{dep,jdbcType=VARCHAR},
