@@ -1,5 +1,6 @@
 package com.springmvc.service.impl;
 
+import com.springmvc.activemq.producer.Producer;
 import com.springmvc.dao.FlightFareSourceDao;
 import com.springmvc.pojo.FlightFare;
 import com.springmvc.service.IFlightFareSourceService;
@@ -14,13 +15,22 @@ public class FlightFareSourceServiceImpl implements IFlightFareSourceService{
     @Resource
     private FlightFareSourceDao flightFareSourceDao;
 
+    @Resource
+    private Producer producer;
+
     public int addFlightFareSource(FlightFare flightFare) {
         if (!validateData(flightFare, false)){
             System.out.println("添加的FlightFare中，部分参数有误，无法添加！");
             return 0;
         }
         flightFare.setLinkKey(UUID.randomUUID().toString().replace("-", "").toLowerCase());
-        return flightFareSourceDao.insert(flightFare);
+        int resultCount = flightFareSourceDao.insert(flightFare);
+        if (resultCount == 1){
+            String textMessage = FlightFareServiceImpl.ADD_INDEX + "-" + flightFare.getLinkKey();
+            //发送MQ消息
+            producer.sendText(textMessage);
+        }
+        return resultCount;
     }
 
     public int updateFlightFareSource(FlightFare flightFare) {
@@ -28,7 +38,13 @@ public class FlightFareSourceServiceImpl implements IFlightFareSourceService{
             System.out.println("修改的FlightFare中，部分参数有误，无法修改！");
             return 0;
         }
-        return flightFareSourceDao.updateByLinkKey(flightFare);
+        int resultCount = flightFareSourceDao.updateByLinkKey(flightFare);
+        if (resultCount == 1){
+            String textMessage = FlightFareServiceImpl.UPDATE_INDEX + "-" + flightFare.getLinkKey();
+            //发送MQ消息
+            producer.sendText(textMessage);
+        }
+        return resultCount;
     }
 
     public FlightFare querySourceByLinkKey(String linkKey) {

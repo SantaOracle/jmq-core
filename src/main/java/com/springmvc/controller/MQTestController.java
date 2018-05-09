@@ -3,7 +3,7 @@ package com.springmvc.controller;
 import com.springmvc.activemq.consumer.IConsumer;
 import com.springmvc.activemq.consumer.QueueConsumer;
 import com.springmvc.activemq.producer.IProducer;
-import com.springmvc.activemq.producer.QueueProducer;
+import com.springmvc.activemq.producer.Producer;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,17 +20,17 @@ public class MQTestController {
     @Resource
     private JmsTemplate jmsTemplate;
     @Resource
-    private QueueProducer queueProducer;
+    private Producer producer;
     @Resource
     private QueueConsumer queueConsumer;
 
-    private IProducer producer;
-    private IConsumer consumer;
+    private IProducer jmqProducer;
+    private IConsumer jmqConsumer;
 
     @PostConstruct
     public void init(){
-        producer = queueProducer;
-        consumer = queueConsumer;
+        jmqProducer = producer;
+        jmqConsumer = queueConsumer;
     }
 
     @RequestMapping("/sendText")
@@ -41,14 +41,14 @@ public class MQTestController {
         if (jmsTemplate == null){
             System.out.println("jmsTemplate is null");
         }
-        producer.sendText(msg);
+        jmqProducer.sendText(msg);
         return "success";
     }
 
     @RequestMapping("/reciveText")
     @ResponseBody
     public String reciveText(){
-        consumer.reciveText();
+        jmqConsumer.reciveText();
         return "success";
     }
 }

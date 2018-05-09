@@ -8,13 +8,10 @@ import javax.annotation.Resource;
 import javax.jms.*;
 
 @Component
-public class QueueProducer implements IProducer{
+public class Producer implements IProducer{
 
     @Resource
     private JmsTemplate jmsTemplate;        //default JmsTemplate, default destination is queue
-
-    @Resource
-    private Destination queueDestination;
 
     public void sendText(final String textMsg) {
         jmsTemplate.send(new MessageCreator() {
@@ -24,9 +21,5 @@ public class QueueProducer implements IProducer{
                 return msg;
             }
         });
-    }
-
-    public void sendText(Destination destination, String textMsg) {
-
     }
 }

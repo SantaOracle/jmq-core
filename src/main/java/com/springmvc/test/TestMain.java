@@ -17,11 +17,15 @@ public class TestMain {
 
 
     public static void main(String args[]) throws ParseException {
-       String s = "2018-05-06_17:30";
-       System.out.println(s.replaceAll("_", " "));
-       String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
-       System.out.println(uuid);
+//       String s = "2018-05-06_17:30";
+//       System.out.println(s.replaceAll("_", " "));
+//       String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
+//       System.out.println(uuid);
+        String s = "1-ef1d5s6f1e85s";
+        String s2 = "0-ejoigdjsoi";
 
+        System.out.println(s.startsWith("1-"));
+        System.out.println(s2.startsWith("1-"));
 
     }
 

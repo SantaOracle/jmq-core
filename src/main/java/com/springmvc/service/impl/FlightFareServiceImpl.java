@@ -10,6 +10,7 @@ import com.springmvc.service.IFlightFareService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +27,9 @@ public class FlightFareServiceImpl implements IFlightFareService {
     @Resource
     private FlightFareDao flightFareDao;
 
+    @Resource
+    private FlightFareSourceServiceImpl flightFareSourceService;
+
     //上层缓存，为了提升QPS而设计
     private Cache<String, List<FlightFare>> cache = Caffeine.newBuilder()
             .maximumSize(5000)
@@ -39,6 +43,15 @@ public class FlightFareServiceImpl implements IFlightFareService {
 
     private ScheduledExecutorService delayInvalidCachePool = Executors.newScheduledThreadPool(1);
 
+    public static String ADD_INDEX = "1";
+
+    public static String UPDATE_INDEX = "2";
+
+    /**
+     * 按照dep、arr、depTime查询机票报价
+     * @param condition
+     * @return
+     */
     public List<FlightFare> searchFareByCondition(FlightFare condition) {
 
         //验证条件参数
@@ -60,6 +73,28 @@ public class FlightFareServiceImpl implements IFlightFareService {
         filterResult(result);
         cache.put(cacheKey, result);
         return result;
+    }
+
+    /**
+     * 接收mq消息，同步flight_fare和flight_fare_source数据库表数据
+     * msg内容为 操作位-linkKey，比如：1-c69a1e6e7fbb43a899f41621caa46144
+     * 该linkKey对应的FlightFare在flight_fare_source表中一定存在（只不过validate不一定为Y）
+     * 数据同步过程：
+     * @param msg
+     */
+    public void dataOnchange(String msg){
+        List<String> msgList = Arrays.asList(msg.split("-"));
+        FlightFare newData = flightFareSourceService.querySourceByLinkKey(msgList.get(1));
+        String invalidCacheKey;
+        if (msgList.get(0).equals(FlightFareServiceImpl.ADD_INDEX)){
+            flightFareDao.insert(newData);
+            invalidCacheKey = generateCacheKey(newData);
+        }else{
+            FlightFare oldData = flightFareDao.selectByLinkKey(msgList.get(1));
+            invalidCacheKey = generateCacheKey(oldData);
+            flightFareDao.updateByLinkKey(newData);
+        }
+        delayExpireCache(invalidCacheKey);
     }
 
     private void filterResult(List<FlightFare> result){

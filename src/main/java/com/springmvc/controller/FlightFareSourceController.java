@@ -50,8 +50,8 @@ public class FlightFareSourceController {
         FlightFare flightFare = new FlightFare();
 
         flightFare.setLinkKey(linkKey);
-        flightFare.setDep(dep.toUpperCase());
-        flightFare.setArr(arr.toUpperCase());
+        flightFare.setDep(dep == null ? null : dep.toUpperCase());
+        flightFare.setArr(arr == null ? null : arr.toUpperCase());
         flightFare.setDepTime(depTime);
         flightFare.setFare(fare);
         flightFare.setValidate(validate);
