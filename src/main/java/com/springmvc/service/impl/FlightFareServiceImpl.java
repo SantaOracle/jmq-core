@@ -70,9 +70,17 @@ public class FlightFareServiceImpl implements IFlightFareService {
 
         //cache miss
         result = flightFareDao.selectByCondition(condition);
-        filterResult(result);
-        cache.put(cacheKey, result);
-        return result;
+        if (result != null){
+            filterResult(result);
+            if (result.size() > 0){
+                cache.put(cacheKey, result);
+            }
+            return result;
+        }else{
+            return Collections.EMPTY_LIST;
+        }
+
+
     }
 
     /**

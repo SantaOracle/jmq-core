@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import javax.jms.*;
 
 @Component
-public class Producer implements IProducer{
+public class TextProducer implements IProducer{
 
     @Resource
     private JmsTemplate jmsTemplate;        //default JmsTemplate, default destination is queue

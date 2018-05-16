@@ -1,6 +1,6 @@
 package com.springmvc.service.impl;
 
-import com.springmvc.activemq.producer.Producer;
+import com.springmvc.activemq.producer.TextProducer;
 import com.springmvc.dao.FlightFareSourceDao;
 import com.springmvc.pojo.FlightFare;
 import com.springmvc.service.IFlightFareSourceService;
@@ -16,7 +16,7 @@ public class FlightFareSourceServiceImpl implements IFlightFareSourceService{
     private FlightFareSourceDao flightFareSourceDao;
 
     @Resource
-    private Producer producer;
+    private TextProducer textProducer;
 
     public int addFlightFareSource(FlightFare flightFare) {
         if (!validateData(flightFare, false)){
@@ -28,7 +28,7 @@ public class FlightFareSourceServiceImpl implements IFlightFareSourceService{
         if (resultCount == 1){
             String textMessage = FlightFareServiceImpl.ADD_INDEX + "-" + flightFare.getLinkKey();
             //发送MQ消息
-            producer.sendText(textMessage);
+            textProducer.sendText(textMessage);
         }
         return resultCount;
     }
@@ -42,7 +42,7 @@ public class FlightFareSourceServiceImpl implements IFlightFareSourceService{
         if (resultCount == 1){
             String textMessage = FlightFareServiceImpl.UPDATE_INDEX + "-" + flightFare.getLinkKey();
             //发送MQ消息
-            producer.sendText(textMessage);
+            textProducer.sendText(textMessage);
         }
         return resultCount;
     }
