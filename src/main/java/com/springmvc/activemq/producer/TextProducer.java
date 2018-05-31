@@ -11,12 +11,12 @@ import javax.jms.*;
 public class TextProducer implements IProducer{
 
     @Resource
-    private JmsTemplate jmsTemplate;        //default JmsTemplate, default destination is queue
+    private JmsTemplate jmsTemplate;        //default JmsTemplate, default destination is topic
 
     public void sendText(final String textMsg) {
         jmsTemplate.send(new MessageCreator() {
             public Message createMessage(Session session) throws JMSException {
-                System.out.println("准备发送文字消息：" + textMsg);
+                System.out.println("TextProducer ready to send text message：" + textMsg);
                 TextMessage msg = session.createTextMessage(textMsg);
                 return msg;
             }

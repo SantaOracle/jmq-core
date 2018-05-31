@@ -36,7 +36,7 @@ public class FlightFareServiceImpl implements IFlightFareService {
             .removalListener(new RemovalListener<String, List<FlightFare>>() {
                 public void onRemoval(String key, List<FlightFare> datas, RemovalCause removalCause) {
                     if (removalCause.equals(RemovalCause.EXPLICIT)){
-                        System.out.println("缓存数据由于更新被移除，key：" + key);
+                        System.out.println("Data was removed from the cache due to updates，key：" + key);
                     }
                 }
             }).build();
@@ -56,7 +56,7 @@ public class FlightFareServiceImpl implements IFlightFareService {
 
         //验证条件参数
         if (!validateCondition(condition)){
-            System.out.println("查询参数有误！");
+            System.out.println("Condition error！");
             return Collections.EMPTY_LIST;
         }
 
@@ -65,18 +65,23 @@ public class FlightFareServiceImpl implements IFlightFareService {
         List<FlightFare> result = cache.getIfPresent(cacheKey);
         if (result != null){
             //cache hit
+            System.out.println("Cache hit, key:" + cacheKey);
             return result;
         }
 
         //cache miss
+        System.out.println("Cache miss");
         result = flightFareDao.selectByCondition(condition);
         if (result != null){
+            System.out.println("unfiltered result size:" + result.size());
             filterResult(result);
+            System.out.println("filtered result size:" + result.size());
             if (result.size() > 0){
                 cache.put(cacheKey, result);
             }
             return result;
         }else{
+            System.out.println("Result is empty!");
             return Collections.EMPTY_LIST;
         }
 
@@ -137,7 +142,7 @@ public class FlightFareServiceImpl implements IFlightFareService {
         StringBuilder keyBuilder = new StringBuilder();
         keyBuilder.append(condition.getDep().toUpperCase())
                 .append(condition.getArr().toUpperCase())
-                .append(condition.getDepTime().replaceAll("-", ""));
+                .append(condition.getDepTime().replaceAll("-", "").substring(0, 7));
         return keyBuilder.toString();
     }
 
@@ -145,6 +150,7 @@ public class FlightFareServiceImpl implements IFlightFareService {
      * 延时执行缓存失效，避免因线程安全问题导致脏数据留在缓存中
      */
     private void delayExpireCache(final String key){
+        System.out.println("delay expire Cache, key:" + key);
         delayInvalidCachePool.schedule(new Runnable() {
             public void run() {
                 expireCache(key);

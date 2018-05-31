@@ -18,7 +18,7 @@ public class FareDataChangeListener implements IMQListener{
         TextMessage textMessage = (TextMessage) message;
         try {
             String text = textMessage.getText();
-            System.out.println("监听器接收到文字消息：" + text);
+            System.out.println("FareDataChangeListener get text message：" + text);
             flightFareService.dataOnchange(text);
         } catch (JMSException e) {
             e.printStackTrace();

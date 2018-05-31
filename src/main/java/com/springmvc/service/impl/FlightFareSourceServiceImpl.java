@@ -20,7 +20,7 @@ public class FlightFareSourceServiceImpl implements IFlightFareSourceService{
 
     public int addFlightFareSource(FlightFare flightFare) {
         if (!validateData(flightFare, false)){
-            System.out.println("添加的FlightFare中，部分参数有误，无法添加！");
+            System.out.println("Condition for adding data validated fail！");
             return 0;
         }
         flightFare.setLinkKey(UUID.randomUUID().toString().replace("-", "").toLowerCase());
@@ -35,7 +35,7 @@ public class FlightFareSourceServiceImpl implements IFlightFareSourceService{
 
     public int updateFlightFareSource(FlightFare flightFare) {
         if (!validateData(flightFare, true)){
-            System.out.println("修改的FlightFare中，部分参数有误，无法修改！");
+            System.out.println("Condition for updating data validated fail！");
             return 0;
         }
         int resultCount = flightFareSourceDao.updateByLinkKey(flightFare);
@@ -49,7 +49,7 @@ public class FlightFareSourceServiceImpl implements IFlightFareSourceService{
 
     public FlightFare querySourceByLinkKey(String linkKey) {
         if (linkKey == null){
-            System.out.println("linkKey不能为空！");
+            System.out.println("linkKey could not be null！");
             return null;
         }
         return flightFareSourceDao.selectByLinkKey(linkKey);
