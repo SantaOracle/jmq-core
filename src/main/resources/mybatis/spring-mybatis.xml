@@ -16,6 +16,9 @@
         <property name="location" value="classpath:jdbc.properties" />
     </bean>
 
+    <!--直接使用context标签引入配置文件，推荐做法-->
+    <!--<context:property-placeholder location="classpath:jdbc.properties" />-->
+
     <!--第一份数据库配置-->
     <!--连接池配置-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
