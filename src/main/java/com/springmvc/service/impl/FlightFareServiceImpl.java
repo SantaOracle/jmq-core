@@ -142,7 +142,7 @@ public class FlightFareServiceImpl implements IFlightFareService {
         StringBuilder keyBuilder = new StringBuilder();
         keyBuilder.append(condition.getDep().toUpperCase())
                 .append(condition.getArr().toUpperCase())
-                .append(condition.getDepTime().replaceAll("-", "").substring(0, 7));
+                .append(condition.getDepTime().replaceAll("-", "").substring(0, 8));
         return keyBuilder.toString();
     }
 
